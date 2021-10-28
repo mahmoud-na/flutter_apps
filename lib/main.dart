@@ -20,6 +20,19 @@ import 'layout/todo_home/todo_home_screen.dart';
 import 'modules/login_page/login_screen.dart';
 import 'modules/shop_app/login/cubit/cubit.dart';
 
+
+
+    /*
+      * 1. Check master
+      * 2. Update master
+      * 3. create branch
+      * 4. Code .....
+      * 5. Commit
+      *
+    */
+
+
+
 Future<void> main() async {
   /*
     *   WidgetsFlutterBinding.ensureInitialized();
