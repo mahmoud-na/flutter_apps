@@ -28,9 +28,6 @@ import 'modules/shop_app/login/cubit/cubit.dart';
       * 3. create branch
       * 4. Code .....
       * 5. Commit
-      * kholio
-      * joe
-      * amr
     */
 
 
