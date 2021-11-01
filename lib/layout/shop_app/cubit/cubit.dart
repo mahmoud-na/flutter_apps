@@ -51,7 +51,7 @@ class ShopCubit extends Cubit<ShopStates> {
   }
 
 
-  CategoriesModel? categoriesModelModel;
+  CategoriesModel? categoriesModel;
   void getCategoryData() {
     emit(ShopCategoriesDataLoadingState());
 
@@ -59,8 +59,8 @@ class ShopCubit extends Cubit<ShopStates> {
       url: GET_CATEGORIES,
       authorization: '',
     ).then((value) {
-      categoriesModelModel = CategoriesModel.fromJson(value.data);
-      print(categoriesModelModel!.data!.data);
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      print(categoriesModel!.data!.data);
       // print(homeModel.data.banners[0]);
 
       emit(ShopCategoriesDataSuccessState());
