@@ -6,7 +6,7 @@ class CategoriesModel {
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'];
+    data = CategoriesDataModel.fromJson(json['data']);
   }
 }
 
@@ -25,10 +25,10 @@ class CategoriesDataModel {
   dynamic total;
 
   CategoriesDataModel.fromJson(Map<String, dynamic> json) {
-    // data = CategoryModel.fromJson(json['data']);
-
-
     currentPage = json['current_page'];
+    json['data'].forEach((element){
+      data.add(CategoryModel.fromJson(element));
+    });
     firstPageUrl = json['first_page_url'];
     from = json['from'];
     lastPage = json['last_page'];
