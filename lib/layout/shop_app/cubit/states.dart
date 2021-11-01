@@ -16,7 +16,7 @@ class ShopHomeDataErrorState extends ShopStates{
   ShopHomeDataErrorState(this.error);
 }
 
-
+class ShopCategoriesDataLoadingState extends ShopStates{}
 class ShopCategoriesDataSuccessState extends ShopStates{}
 class ShopCategoriesDataErrorState extends ShopStates{
   final String error;
