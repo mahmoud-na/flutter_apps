@@ -48,7 +48,7 @@ Future<void> main() async {
 
   if (onBoardingState != null) {
     if (token != null) {
-      startingScreen =  ShopLayout();
+      startingScreen = ShopLayout();
     } else {
       startingScreen = ShopLoginScreen();
     }
@@ -92,7 +92,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ShopCubit()
             ..getHomeData()
-            ..getCategoryData()..getFavoritesData(),
+            ..getCategoryData()
+            ..getFavoritesData()
+            ..getProfileData(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
@@ -105,8 +107,8 @@ class MyApp extends StatelessWidget {
             themeMode: AppCubit.get(context).isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
-            home: const Directionality(
-              child: ShopLayout(),
+            home:  Directionality(
+              child: startingScreen!,
               // textDirection: TextDirection.rtl,
               textDirection: TextDirection.ltr,
             ),
