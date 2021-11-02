@@ -14,12 +14,10 @@ import 'cubit/cubit.dart';
 class ShopLoginScreen extends StatelessWidget {
   ShopLoginScreen({Key? key}) : super(key: key);
   var formKey = GlobalKey<FormState>();
-
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     return BlocProvider(
       create: (context) => ShopLoginCubit(),
       child: BlocConsumer<ShopLoginCubit, ShopLoginScreenStates>(
@@ -176,7 +174,7 @@ class ShopLoginScreen extends StatelessWidget {
                               onPressed: () {
                                 navigateTo(
                                   context,
-                                  const ShopRegisterScreen(),
+                                   ShopRegisterScreen(),
                                 );
                               },
                             )
