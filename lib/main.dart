@@ -20,17 +20,13 @@ import 'layout/todo_home/todo_home_screen.dart';
 import 'modules/login_page/login_screen.dart';
 import 'modules/shop_app/login/cubit/cubit.dart';
 
-
-
-    /*
+/*
       * 1. Check master
       * 2. Update master
       * 3. create branch
       * 4. Code .....
       * 5. Commit
     */
-
-
 
 Future<void> main() async {
   /*
@@ -45,18 +41,18 @@ Future<void> main() async {
     baseUrl: 'https://student.valuxapps.com/api/',
   );
   await CacheHelper.init();
- late Widget startingScreen;
+  late Widget startingScreen;
   bool? isDark = CacheHelper.getData(key: "isDark");
   bool? onBoardingState = CacheHelper.getData(key: "onBoarding");
-   token = CacheHelper.getData(key: "token");
+  token = CacheHelper.getData(key: "token");
 
-  if(onBoardingState!=null){
-    if(token!=null){
-      startingScreen = ShopLayout();
-    }else{
+  if (onBoardingState != null) {
+    if (token != null) {
+      startingScreen =  ShopLayout();
+    } else {
       startingScreen = ShopLoginScreen();
     }
-  }else{
+  } else {
     startingScreen = OnBoardingScreen();
   }
 
@@ -94,7 +90,9 @@ class MyApp extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (context) => ShopCubit()..getHomeData()..getCategoryData(),
+          create: (context) => ShopCubit()
+            ..getHomeData()
+            ..getCategoryData()..getFavoritesData(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
@@ -107,8 +105,8 @@ class MyApp extends StatelessWidget {
             themeMode: AppCubit.get(context).isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
-            home: Directionality(
-              child: ShopLoginScreen(),
+            home: const Directionality(
+              child: ShopLayout(),
               // textDirection: TextDirection.rtl,
               textDirection: TextDirection.ltr,
             ),
