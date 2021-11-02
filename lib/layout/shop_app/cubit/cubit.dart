@@ -86,7 +86,7 @@ class ShopCubit extends Cubit<ShopStates> {
       data: {
         'product_id': productId,
       },
-      authorization: token,
+      authorization: token!,
     ).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
       if (!(changeFavoritesModel!.status)!) {
@@ -142,7 +142,7 @@ class ShopCubit extends Cubit<ShopStates> {
     emit(ShopUpdateProfileDataLoadingState());
     DioHelper.putData(
       url: UPDATE_PROFILE,
-      authorization: token,
+      authorization: token!,
       data: {
         'name': name,
         'phone': phone,
