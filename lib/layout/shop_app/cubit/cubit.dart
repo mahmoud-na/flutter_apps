@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/layout/shop_app/cubit/states.dart';
 import 'package:todo_app/models/shop_app/categories_model.dart';
+import 'package:todo_app/models/shop_app/change_favorites_model.dart';
+import 'package:todo_app/models/shop_app/favorites_model.dart';
 import 'package:todo_app/models/shop_app/shop_app_home_model.dart';
 import 'package:todo_app/modules/shop_app/categories/categories_screen.dart';
 import 'package:todo_app/modules/shop_app/favorites/favorites_screen.dart';
@@ -32,7 +34,8 @@ class ShopCubit extends Cubit<ShopStates> {
     emit(ChangeShopBottomNavIndexState());
   }
 
-   HomeModel? homeModel;
+  HomeModel? homeModel;
+  Map<int, bool>? favorites = {};
 
   void getHomeData() {
     emit(ShopHomeDataLoadingState());
@@ -41,8 +44,13 @@ class ShopCubit extends Cubit<ShopStates> {
       authorization: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      // print(homeModel.data.banners[4].id);
-      // print(homeModel.data.banners[0]);
+      homeModel!.data.products.forEach((element) {
+        favorites!.addAll({
+          element.id!: element.inFavorites!,
+        });
+      });
+      print("Favorites List: ${favorites.toString()}");
+
       emit(ShopHomeDataSuccessState());
     }).catchError((error) {
       print(error.toString());
@@ -50,8 +58,8 @@ class ShopCubit extends Cubit<ShopStates> {
     });
   }
 
-
   CategoriesModel? categoriesModel;
+
   void getCategoryData() {
     emit(ShopCategoriesDataLoadingState());
 
@@ -60,13 +68,52 @@ class ShopCubit extends Cubit<ShopStates> {
       authorization: '',
     ).then((value) {
       categoriesModel = CategoriesModel.fromJson(value.data);
-      print(categoriesModel!.data!.data);
-      // print(homeModel.data.banners[0]);
-
       emit(ShopCategoriesDataSuccessState());
     }).catchError((error) {
       print(error.toString());
       emit(ShopCategoriesDataErrorState(error.toString()));
+    });
+  }
+
+  ChangeFavoritesModel? changeFavoritesModel;
+
+  void changeFavorites(int productId) {
+    favorites![productId] = !(favorites![productId])!;
+    emit(ShopFavoritesChangeState());
+    DioHelper.postData(
+      url: FAVORITES,
+      data: {
+        'product_id': productId,
+      },
+      authorization: token!,
+    ).then((value) {
+      changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+      if (!(changeFavoritesModel!.status)!) {
+        favorites![productId] = !(favorites![productId])!;
+      }else{
+        getFavoritesData();
+      }
+      emit(ShopFavoritesChangeSuccessState(changeFavoritesModel!));
+    }).catchError((error) {
+      favorites![productId] = !(favorites![productId])!;
+      emit(ShopFavoritesChangeErrorState(error.toString()));
+    });
+  }
+
+  FavoritesModel? favoritesModel;
+
+  void getFavoritesData() {
+    emit(ShopGetFavoritesDataLoadingState());
+    print(token);
+    DioHelper.getData(
+      url: FAVORITES,
+      authorization: token,
+    ).then((value) {
+      favoritesModel = FavoritesModel.fromJson(value.data);
+      emit(ShopGetFavoritesDataSuccessState());
+    }).catchError((error) {
+      print(error);
+      emit(ShopGetFavoritesDataErrorState(error.toString()));
     });
   }
 }

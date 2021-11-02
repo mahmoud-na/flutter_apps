@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/layout/shop_app/shop_app_layout.dart';
 import 'package:todo_app/modules/shop_app/login/cubit/states.dart';
 import 'package:todo_app/modules/shop_app/register/shop_register_screen.dart';

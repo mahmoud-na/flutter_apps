@@ -9,6 +9,7 @@ import 'package:todo_app/layout/shop_app/cubit/cubit.dart';
 import 'package:todo_app/layout/shop_app/cubit/states.dart';
 import 'package:todo_app/models/shop_app/categories_model.dart';
 import 'package:todo_app/models/shop_app/shop_app_home_model.dart';
+import 'package:todo_app/shared/components/components.dart';
 import 'package:todo_app/shared/styles/colors.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -17,12 +18,21 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+
+        if(state is ShopFavoritesChangeSuccessState){
+          if(!(state.model.status)!){
+            showToast(msg: (state.model.message)!, state: ToastStates.ERROR);
+          }
+        }
+      },
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: (ShopCubit.get(context).homeModel != null)&&(ShopCubit.get(context).categoriesModel != null),
+          condition: (ShopCubit.get(context).homeModel != null) &&
+              (ShopCubit.get(context).categoriesModel != null),
           builder: (context) {
-            return productsBuilder(ShopCubit.get(context).homeModel!,ShopCubit.get(context).categoriesModel!);
+            return productsBuilder(ShopCubit.get(context).homeModel!,
+                ShopCubit.get(context).categoriesModel!, context);
           },
           fallback: (context) {
             return const Center(
@@ -34,7 +44,8 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget productsBuilder(HomeModel model,CategoriesModel categoryModel ) => SingleChildScrollView(
+  Widget productsBuilder(HomeModel model, CategoriesModel categoryModel, context) =>
+      SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +77,9 @@ class ProductsScreen extends StatelessWidget {
               height: 10.0,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,7 +98,8 @@ class ProductsScreen extends StatelessWidget {
                     child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => buildCategoryItem(categoryModel.data!.data[index]),
+                      itemBuilder: (context, index) =>
+                          buildCategoryItem(categoryModel.data!.data[index]),
                       separatorBuilder: (context, index) => const SizedBox(
                         width: 10.0,
                       ),
@@ -119,7 +133,7 @@ class ProductsScreen extends StatelessWidget {
                 childAspectRatio: 1 / 1.51,
                 children: List.generate(
                   model.data.products.length,
-                  (index) => buildGridProduct(model.data.products[index]),
+                  (index) => buildGridProduct(model.data.products[index], context),
                 ),
               ),
             ),
@@ -127,7 +141,7 @@ class ProductsScreen extends StatelessWidget {
         ),
       );
 
-  Widget buildGridProduct(ProductModel model) => Container(
+  Widget buildGridProduct(ProductModel model, context) => Container(
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,13 +175,16 @@ class ProductsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    model.name!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14.0,
-                      height: 1.3,
+                  SizedBox(
+                    height:37.0,
+                    child: Text(
+                      model.name!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        height: 1.3,
+                      ),
                     ),
                   ),
                   Row(
@@ -193,12 +210,19 @@ class ProductsScreen extends StatelessWidget {
                         ),
                       const Spacer(),
                       IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          size: 14.0,
-                        ),
+                        onPressed: () {
+                          ShopCubit.get(context).changeFavorites(model.id!);
+                        },
+                        icon: (ShopCubit.get(context).favorites![model.id])!
+                            ? const Icon(
+                                Icons.favorite,
+                                size: 20.0,
+                                color: Colors.red,
+                              )
+                            : const Icon(
+                                Icons.favorite_border,
+                                size: 20.0,
+                              ),
                       )
                     ],
                   ),
@@ -213,8 +237,7 @@ class ProductsScreen extends StatelessWidget {
         alignment: AlignmentDirectional.bottomCenter,
         children: [
           Image(
-            image: NetworkImage(
-                model.image!),
+            image: NetworkImage(model.image!),
             height: 100.0,
             width: 120.0,
             // fit: BoxFit.cover,

@@ -1,3 +1,5 @@
+import 'package:todo_app/models/shop_app/change_favorites_model.dart';
+
 abstract class ShopStates {}
 
 
@@ -23,6 +25,26 @@ class ShopCategoriesDataErrorState extends ShopStates{
   ShopCategoriesDataErrorState(this.error);
 }
 
+
+
+class ShopFavoritesChangeState extends ShopStates{}
+class ShopFavoritesChangeSuccessState extends ShopStates{
+  final ChangeFavoritesModel model;
+  ShopFavoritesChangeSuccessState(this.model);
+}
+class ShopFavoritesChangeErrorState extends ShopStates{
+  final String error;
+  ShopFavoritesChangeErrorState(this.error);
+}
+
+
+
+class ShopGetFavoritesDataLoadingState extends ShopStates{}
+class ShopGetFavoritesDataSuccessState extends ShopStates{}
+class ShopGetFavoritesDataErrorState extends ShopStates{
+  final String error;
+  ShopGetFavoritesDataErrorState(this.error);
+}
 
 
 
