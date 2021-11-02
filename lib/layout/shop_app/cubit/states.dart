@@ -1,4 +1,5 @@
 import 'package:todo_app/models/shop_app/change_favorites_model.dart';
+import 'package:todo_app/models/shop_app/shop_login_model.dart';
 
 abstract class ShopStates {}
 
@@ -47,5 +48,24 @@ class ShopGetFavoritesDataErrorState extends ShopStates{
 }
 
 
+class ShopGetProfileDataLoadingState extends ShopStates{}
+class ShopGetProfileDataSuccessState extends ShopStates{
+  final ShopLoginModel profileModel;
+  ShopGetProfileDataSuccessState(this.profileModel);
+}
+class ShopGetProfileDataErrorState extends ShopStates{
+  final String error;
+  ShopGetProfileDataErrorState(this.error);
+}
 
+
+class ShopUpdateProfileDataLoadingState extends ShopStates{}
+class ShopUpdateProfileDataSuccessState extends ShopStates{
+  final ShopLoginModel profileModel;
+  ShopUpdateProfileDataSuccessState(this.profileModel);
+}
+class ShopUpdateProfileDataErrorState extends ShopStates{
+  final String error;
+  ShopUpdateProfileDataErrorState(this.error);
+}
 

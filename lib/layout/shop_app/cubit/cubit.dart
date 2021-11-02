@@ -6,6 +6,7 @@ import 'package:todo_app/models/shop_app/categories_model.dart';
 import 'package:todo_app/models/shop_app/change_favorites_model.dart';
 import 'package:todo_app/models/shop_app/favorites_model.dart';
 import 'package:todo_app/models/shop_app/shop_app_home_model.dart';
+import 'package:todo_app/models/shop_app/shop_login_model.dart';
 import 'package:todo_app/modules/shop_app/categories/categories_screen.dart';
 import 'package:todo_app/modules/shop_app/favorites/favorites_screen.dart';
 import 'package:todo_app/modules/shop_app/products/products_screen.dart';
@@ -85,12 +86,12 @@ class ShopCubit extends Cubit<ShopStates> {
       data: {
         'product_id': productId,
       },
-      authorization: token!,
+      authorization: token,
     ).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
       if (!(changeFavoritesModel!.status)!) {
         favorites![productId] = !(favorites![productId])!;
-      }else{
+      } else {
         getFavoritesData();
       }
       emit(ShopFavoritesChangeSuccessState(changeFavoritesModel!));
@@ -114,6 +115,45 @@ class ShopCubit extends Cubit<ShopStates> {
     }).catchError((error) {
       print(error);
       emit(ShopGetFavoritesDataErrorState(error.toString()));
+    });
+  }
+
+  ShopLoginModel? profileModel;
+
+  void getProfileData() {
+    emit(ShopGetProfileDataLoadingState());
+    DioHelper.getData(
+      url: PROFILE,
+      authorization: token,
+    ).then((value) {
+      profileModel = ShopLoginModel.fromJson(value.data);
+      emit(ShopGetProfileDataSuccessState(profileModel!));
+    }).catchError((error) {
+      print(error);
+      emit(ShopGetProfileDataErrorState(error.toString()));
+    });
+  }
+
+  void updateProfileData({
+    required name,
+    required phone,
+    required email,
+  }) {
+    emit(ShopUpdateProfileDataLoadingState());
+    DioHelper.putData(
+      url: UPDATE_PROFILE,
+      authorization: token,
+      data: {
+        'name': name,
+        'phone': phone,
+        'email': email,
+      },
+    ).then((value) {
+      profileModel = ShopLoginModel.fromJson(value.data);
+      emit(ShopUpdateProfileDataSuccessState(profileModel!));
+    }).catchError((error) {
+      print(error);
+      emit(ShopUpdateProfileDataErrorState(error.toString()));
     });
   }
 }
