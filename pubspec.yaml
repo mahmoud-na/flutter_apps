@@ -47,6 +47,10 @@ dependencies:
   conditional_builder_null_safety: ^0.0.6
   fluttertoast: ^8.0.8
   carousel_slider: ^4.0.0
+  #firebase
+  firebase_core: ^1.8.0
+  firebase_auth: ^3.1.4
+  cloud_firestore: ^2.5.4
 
 
 dev_dependencies:
