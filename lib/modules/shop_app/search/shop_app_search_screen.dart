@@ -5,7 +5,6 @@ import 'package:todo_app/models/shop_app/search_model.dart';
 import 'package:todo_app/modules/shop_app/search/cubit/states.dart';
 import 'package:todo_app/shared/components/components.dart';
 import 'package:todo_app/shared/styles/colors.dart';
-
 import 'cubit/cubit.dart';
 
 class ShopAppSearchScreen extends StatelessWidget {
@@ -51,7 +50,6 @@ class ShopAppSearchScreen extends StatelessWidget {
                       child: LinearProgressIndicator(),
                     ),
                   if(state is ShopSearchSuccessState)
-                  // if((ShopSearchCubit.get(context).searchModel !=null))
                     Expanded(
                     child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
@@ -128,12 +126,10 @@ class ShopAppSearchScreen extends StatelessWidget {
                         const Spacer(),
                         IconButton(
                           onPressed: () {
-                            // ShopCubit.get(context)
-                            //     .changeFavorites(model.product!.id!);
+                            ShopCubit.get(context)
+                                .changeFavorites(model.id!);
                           },
-                          icon: (model.inFavorites)!
-                              ?
-                              // (ShopCubit.get(context).favorites![model.product!.id!])! ?
+                          icon: (model.inFavorites)!?
                               const Icon(
                                   Icons.favorite,
                                   size: 20.0,
