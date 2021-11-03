@@ -1,12 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/layout/shop_app/cubit/cubit.dart';
 import 'package:todo_app/layout/shop_app/shop_app_layout.dart';
+import 'package:todo_app/layout/social_app/social_app_layout.dart';
+import 'package:todo_app/models/social_app/cubit/cubit.dart';
 import 'package:todo_app/modules/shop_app/login/shop_login_screen.dart';
 import 'package:todo_app/modules/shop_app/on_boarding/on_boarding_screen.dart';
+import 'package:todo_app/modules/social_app/social_login/social_login_screen.dart';
 import 'package:todo_app/shared/bloc_observer.dart';
 import 'package:todo_app/shared/components/constants.dart';
 import 'package:todo_app/shared/cubit/cubit.dart';
@@ -36,29 +40,39 @@ Future<void> main() async {
   */
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   Bloc.observer = MyBlocObserver();
   DioHelper.init(
     baseUrl: 'https://student.valuxapps.com/api/',
   );
   await CacheHelper.init();
-  late Widget startingScreen;
+  late Widget shopAppStartingScreen;
+  late Widget socialAppStartingScreen;
   bool? isDark = CacheHelper.getData(key: "isDark");
   bool? onBoardingState = CacheHelper.getData(key: "onBoarding");
   token = CacheHelper.getData(key: "token");
+  uId = CacheHelper.getData(key: "uId");
 
   if (onBoardingState != null) {
     if (token != null) {
-      startingScreen = ShopLayout();
+      shopAppStartingScreen = const ShopLayout();
     } else {
-      startingScreen = ShopLoginScreen();
+      shopAppStartingScreen = ShopLoginScreen();
     }
   } else {
-    startingScreen = OnBoardingScreen();
+    shopAppStartingScreen = OnBoardingScreen();
+  }
+
+  if(uId!=null){
+    socialAppStartingScreen = const SocialAppScreen();
+  }else{
+    socialAppStartingScreen =  SocialLoginScreen();
+
   }
 
   runApp(MyApp(
     isDark: isDark,
-    startingScreen: startingScreen,
+    startingScreen: socialAppStartingScreen,
   ));
 }
 
@@ -95,6 +109,9 @@ class MyApp extends StatelessWidget {
             ..getCategoryData()
             ..getFavoritesData()
             ..getProfileData(),
+        ),
+        BlocProvider(
+          create: (context) => SocialCubit()..getUserData(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
