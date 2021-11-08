@@ -15,6 +15,7 @@ ThemeData darkTheme = ThemeData(
     ),
     backgroundColor: HexColor('333739'),
     titleTextStyle: const TextStyle(
+      fontFamily: 'jannah',
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
       color: Colors.white,
@@ -37,12 +38,19 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
+    subtitle1: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+      height: 1.3,
+    ),
   ),
   fontFamily: 'jannah',
 );
 ThemeData lightTheme = ThemeData(
   primarySwatch: defaultColor,
   scaffoldBackgroundColor: Colors.white,
+
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,
     systemOverlayStyle: SystemUiOverlayStyle(
@@ -51,6 +59,7 @@ ThemeData lightTheme = ThemeData(
     ),
     backgroundColor: Colors.white,
     titleTextStyle: const TextStyle(
+      fontFamily: 'jannah',
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
       color: Colors.black,
@@ -72,6 +81,12 @@ ThemeData lightTheme = ThemeData(
       fontSize: 18.0,
       fontWeight: FontWeight.w600,
       color: Colors.black,
+    ),
+    subtitle1: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      height: 1.3,
     ),
   ),
   fontFamily: 'jannah',
