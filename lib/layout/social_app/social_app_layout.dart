@@ -2,11 +2,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/models/social_app/cubit/cubit.dart';
-import 'package:todo_app/models/social_app/cubit/states.dart';
+import 'package:todo_app/layout/social_app/cubit/cubit.dart';
+import 'package:todo_app/layout/social_app/cubit/states.dart';
+import 'package:todo_app/modules/social_app/new_post/new_post_screen.dart';
 import 'package:todo_app/shared/components/components.dart';
+import 'package:todo_app/shared/cubit/cubit.dart';
+import 'package:todo_app/shared/styles/icon_broken.dart';
 
 class SocialAppScreen extends StatelessWidget {
   const SocialAppScreen({Key? key}) : super(key: key);
@@ -14,62 +16,72 @@ class SocialAppScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is SocialAddNewPostState) {
+          navigateTo(
+            context,
+            const NewPostScreen(),
+          );
+        }
+      },
       builder: (context, state) {
+        var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Text("News Feed"),
+            title: Text(
+              cubit.titles[cubit.currentIndex],
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  IconBroken.Notification,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  IconBroken.Search,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  AppCubit.get(context).changeAppThemeMode();
+                },
+                icon: const Icon(
+                  Icons.dark_mode,
+                ),
+              ),
+            ],
           ),
-          body: ConditionalBuilder(
-            condition: SocialCubit.get(context).model != null,
-            builder: (context) {
-              var model = SocialCubit.get(context).model;
-              return Column(
-                children: [
-                  if (!FirebaseAuth.instance.currentUser!.emailVerified)
-                    Container(
-                      color: Colors.amber.withOpacity(0.6),
-                      height: 50.0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.info_outline),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-                            const Expanded(
-                              child: Text(
-                                "Please verify your email",
-                              ),
-                            ),
-                            // const Spacer(),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-
-                            defaultTextButton(
-                              text: "Send",
-                              onPressed: () {
-                                FirebaseAuth.instance.currentUser!
-                                    .sendEmailVerification()
-                                    .then((value) {
-                                      showToast(msg: 'Check your mail', state: ToastStates.SUCCESS);
-                                })
-                                    .catchError((error) {});
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              );
+          body: cubit.screens[cubit.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(IconBroken.Home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(IconBroken.Chat),
+                label: 'Chats',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(IconBroken.Paper_Upload),
+                label: 'Post',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(IconBroken.Location),
+                label: 'Users',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(IconBroken.Setting),
+                label: 'Settings',
+              ),
+            ],
+            onTap: (index) {
+              cubit.changeBottomNav(index);
             },
-            fallback: (context) =>
-                const Center(child: CircularProgressIndicator()),
+            currentIndex: cubit.currentIndex,
           ),
         );
       },
