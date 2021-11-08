@@ -37,6 +37,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterScreenStates> {
         name: name,
         phone: phone,
         uId: value.user!.uid,
+
       );
       // emit(SocialRegisterSuccessState());
     }).catchError((error) {
@@ -56,6 +57,9 @@ class SocialRegisterCubit extends Cubit<SocialRegisterScreenStates> {
       email: email,
       phone: phone,
       uId: uId,
+      bio: 'write your bio ...',
+      image: 'https://image.flaticon.com/icons/png/512/929/929422.png',
+      cover: 'https://image.freepik.com/free-vector/hand-drawn-flat-autumn-social-media-cover-template_23-2149102174.jpg',
       isEmailVerified: false,
     );
     FirebaseFirestore.instance

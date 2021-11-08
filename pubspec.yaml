@@ -99,6 +99,10 @@ flutter:
       fonts:
         - asset: assets/fonts/jannah.ttf
           weight: 700
+    - family: IconBroken
+      fonts:
+        - asset: assets/fonts/icons.ttf
+
 
 
   #   - family: Trajan Pro

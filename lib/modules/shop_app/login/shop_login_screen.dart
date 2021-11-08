@@ -87,7 +87,7 @@ class ShopLoginScreen extends StatelessWidget {
                           height: 15.0,
                         ),
                         Text(
-                          'Login now to browse our hot offers',
+                          'Register for HOT! Offers',
                           style:
                               Theme.of(context).textTheme.bodyText1!.copyWith(
                                     color: Colors.grey,
