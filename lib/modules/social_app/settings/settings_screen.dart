@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/layout/social_app/cubit/cubit.dart';
 import 'package:todo_app/layout/social_app/cubit/states.dart';
+import 'package:todo_app/modules/social_app/edit_profile/edit_profile_screen.dart';
+import 'package:todo_app/shared/components/components.dart';
 import 'package:todo_app/shared/styles/icon_broken.dart';
 
 class SocialSettingsScreen extends StatelessWidget {
@@ -31,8 +33,12 @@ class SocialSettingsScreen extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(4.0),
-                            topRight: Radius.circular(4.0),
+                            topLeft: Radius.circular(
+                              4.0,
+                            ),
+                            topRight: Radius.circular(
+                              4.0,
+                            ),
                           ),
                           image: DecorationImage(
                             image: NetworkImage(
@@ -158,7 +164,12 @@ class SocialSettingsScreen extends StatelessWidget {
                     width: 10.0,
                   ),
                   OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      navigateTo(
+                        context,
+                        EditProfileScreen(),
+                      );
+                    },
                     child: const Icon(
                       IconBroken.Edit,
                       size: 16.0,

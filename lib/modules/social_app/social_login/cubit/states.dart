@@ -7,7 +7,6 @@ class SocialLoginLoadingState extends SocialLoginScreenStates {}
 
 class SocialLoginSuccessState extends SocialLoginScreenStates {
 final String uid;
-
   SocialLoginSuccessState(this.uid);
 }
 

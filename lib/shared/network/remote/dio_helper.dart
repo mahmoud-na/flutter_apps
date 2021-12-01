@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 class DioHelper {
   static late Dio dio;
 
-  static init({required String baseUrl}) {
+  static init({
+    required String baseUrl,
+  }) {
     dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -14,7 +16,7 @@ class DioHelper {
 
   static Future<Response> getData({
     required String url,
-     Map<String, dynamic>? query,
+    Map<String, dynamic>? query,
     String lang = 'en',
     String? authorization,
   }) async {
@@ -48,8 +50,6 @@ class DioHelper {
     );
   }
 
-
-
   static Future<Response> putData({
     required String url,
     Map<String, dynamic>? query,
@@ -68,5 +68,4 @@ class DioHelper {
       data: data,
     );
   }
-
 }

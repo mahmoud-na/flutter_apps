@@ -20,7 +20,7 @@ class SocialAppScreen extends StatelessWidget {
         if (state is SocialAddNewPostState) {
           navigateTo(
             context,
-            const NewPostScreen(),
+             NewPostScreen(),
           );
         }
       },

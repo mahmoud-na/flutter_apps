@@ -48,6 +48,7 @@ Future<void> main() async {
   await CacheHelper.init();
   late Widget shopAppStartingScreen;
   late Widget socialAppStartingScreen;
+
   bool? isDark = CacheHelper.getData(key: "isDark");
   bool? onBoardingState = CacheHelper.getData(key: "onBoarding");
   token = CacheHelper.getData(key: "token");
@@ -63,17 +64,18 @@ Future<void> main() async {
     shopAppStartingScreen = OnBoardingScreen();
   }
 
-  if(uId!=null){
+  if (uId != null) {
     socialAppStartingScreen = const SocialAppScreen();
-  }else{
-    socialAppStartingScreen =  SocialLoginScreen();
-
+  } else {
+    socialAppStartingScreen = SocialLoginScreen();
   }
 
-  runApp(MyApp(
-    isDark: isDark,
-    startingScreen: socialAppStartingScreen,
-  ));
+  runApp(
+    MyApp(
+      isDark: isDark,
+      startingScreen: socialAppStartingScreen,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -124,8 +126,9 @@ class MyApp extends StatelessWidget {
             themeMode: AppCubit.get(context).isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
-            home:  Directionality(
+            home: Directionality(
               child: startingScreen!,
+              // child: ShopLoginScreen(),
               // textDirection: TextDirection.rtl,
               textDirection: TextDirection.ltr,
             ),
