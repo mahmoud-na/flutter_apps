@@ -22,9 +22,9 @@ class ShopCubit extends Cubit<ShopStates> {
 
   int currentIndex = 0;
   List<Widget> screensList = [
-    ProductsScreen(),
-    CategoriesScreen(),
-    FavoritesScreen(),
+    const ProductsScreen(),
+    const CategoriesScreen(),
+    const FavoritesScreen(),
     SettingsScreen(),
   ];
 

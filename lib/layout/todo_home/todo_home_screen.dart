@@ -67,8 +67,7 @@ class HomeScreen extends StatelessWidget {
                     );
                   }
                 } else {
-                  scaffoldKey.currentState!
-                      .showBottomSheet(
+                  scaffoldKey.currentState!.showBottomSheet(
                         (context) {
                           return Container(
                             padding: const EdgeInsets.only(
@@ -162,9 +161,7 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                         elevation: 20.0,
-                      )
-                      .closed
-                      .then((value) {
+                      ).closed.then((value) {
                         cubit.changeBottomSheetState(isShow: false);
                       });
                   cubit.changeBottomSheetState(isShow: true);

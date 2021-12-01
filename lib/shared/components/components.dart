@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/modules/news_app/web_view/web_view_screen.dart';
-
-// import 'package:todo_app/modules/web_view/web_view_screen.dart';
 import 'package:todo_app/shared/cubit/cubit.dart';
+import 'package:todo_app/shared/styles/icon_broken.dart';
 
 Widget defaultButton({
   double width = double.infinity,
@@ -37,6 +36,25 @@ Widget defaultTextButton({
     TextButton(
       onPressed: onPressed,
       child: Text(text.toUpperCase()),
+    );
+
+PreferredSizeWidget defaultAppBar({
+  required BuildContext context,
+  String? title,
+  List<Widget>? actions,
+}) =>
+    AppBar(
+      titleSpacing: 5.0,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          IconBroken.Arrow___Left_2,
+        ),
+      ),
+      title: Text(title!),
+      actions: actions,
     );
 
 Widget defaultFormField({
@@ -268,10 +286,11 @@ Widget articleBuilder(list, context) => list.isNotEmpty
 
 void navigateTo(context, Widget widget) {
   Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => widget,
-      ));
+    context,
+    MaterialPageRoute(
+      builder: (context) => widget,
+    ),
+  );
 }
 
 void navigateAndReplace(context, Widget widget) {

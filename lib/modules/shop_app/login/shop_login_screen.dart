@@ -16,6 +16,7 @@ class ShopLoginScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -41,7 +42,6 @@ class ShopLoginScreen extends StatelessWidget {
                 token = state.loginModel.data!.token!;
                 navigateAndReplace(context, const ShopLayout());
               });
-
             } else {
               print('=======================================');
               print(state.loginModel.message);
@@ -78,10 +78,10 @@ class ShopLoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           'LOGIN',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.black),
+                          style:
+                              Theme.of(context).textTheme.headline4!.copyWith(
+                                    color: Colors.black,
+                                  ),
                         ),
                         const SizedBox(
                           height: 15.0,
@@ -174,7 +174,7 @@ class ShopLoginScreen extends StatelessWidget {
                               onPressed: () {
                                 navigateTo(
                                   context,
-                                   ShopRegisterScreen(),
+                                  ShopRegisterScreen(),
                                 );
                               },
                             )
