@@ -8,6 +8,7 @@ import 'package:todo_app/modules/social_app/feeds/feeds_screen.dart';
 import 'package:todo_app/modules/social_app/settings/settings_screen.dart';
 import 'package:todo_app/modules/social_app/social_login/cubit/states.dart';
 import 'package:todo_app/modules/social_app/users/users_screen.dart';
+import 'package:todo_app/shared/components/constants.dart';
 import 'package:todo_app/shared/network/end_points.dart';
 import 'package:todo_app/shared/network/remote/dio_helper.dart';
 
@@ -31,6 +32,7 @@ class SocialLoginCubit extends Cubit<SocialLoginScreenStates> {
         .then((value) {
       print(value.user!.email);
       print(value.user!.uid);
+      uId = value.user!.uid;
       emit(SocialLoginSuccessState(value.user!.uid));
     }).catchError((error) {
       print(error.toString());
@@ -49,6 +51,4 @@ class SocialLoginCubit extends Cubit<SocialLoginScreenStates> {
         : const Icon(Icons.visibility_off_outlined);
     emit(SocialLoginChangeVisibilityState());
   }
-
-
 }

@@ -49,20 +49,20 @@ class NewPostScreen extends StatelessWidget {
                     height: 10.0,
                   ),
                 Row(
-                  children: const [
+                  children:  [
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                        'https://image.freepik.com/free-photo/portrait-handsome-young-man-makes-okay-gesture-demonstrates-agreement-likes-idea-smiles-happily-wears-optical-glasses-yellow-hat-t-shirt-models-indoor-its-fine-thank-you-hand-sign_273609-30676.jpg',
+                        '${SocialCubit.get(context).userModel?.image}',
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15.0,
                     ),
                     Expanded(
                       child: Text(
-                        'Amr Nagy',
-                        style: TextStyle(
+                        '${SocialCubit.get(context).userModel?.name}',
+                        style: const TextStyle(
                           height: 1.4,
                         ),
                       ),

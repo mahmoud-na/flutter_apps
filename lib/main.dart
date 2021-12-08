@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,6 +12,7 @@ import 'package:todo_app/modules/shop_app/login/shop_login_screen.dart';
 import 'package:todo_app/modules/shop_app/on_boarding/on_boarding_screen.dart';
 import 'package:todo_app/modules/social_app/social_login/social_login_screen.dart';
 import 'package:todo_app/shared/bloc_observer.dart';
+import 'package:todo_app/shared/components/components.dart';
 import 'package:todo_app/shared/components/constants.dart';
 import 'package:todo_app/shared/cubit/cubit.dart';
 import 'package:todo_app/shared/cubit/states.dart';
@@ -24,14 +26,12 @@ import 'layout/todo_home/todo_home_screen.dart';
 import 'modules/login_page/login_screen.dart';
 import 'modules/shop_app/login/cubit/cubit.dart';
 
-/*
-      * 1. Check master
-      * 2. Update master
-      * 3. create branch
-      * 4. Code .....
-      * 5. Commit
-    */
 
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  showToast(msg: 'on backGround message', state: ToastStates.SUCCESS);
+}
 Future<void> main() async {
   /*
     *   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +41,20 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  var token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+    showToast(msg: 'on Message', state: ToastStates.SUCCESS);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+    showToast(msg: 'on Message opened app', state: ToastStates.SUCCESS);
+  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
   Bloc.observer = MyBlocObserver();
   DioHelper.init(
     baseUrl: 'https://student.valuxapps.com/api/',
@@ -61,7 +75,7 @@ Future<void> main() async {
       shopAppStartingScreen = ShopLoginScreen();
     }
   } else {
-    shopAppStartingScreen = OnBoardingScreen();
+    shopAppStartingScreen = const OnBoardingScreen();
   }
 
   if (uId != null) {
@@ -113,7 +127,9 @@ class MyApp extends StatelessWidget {
             ..getProfileData(),
         ),
         BlocProvider(
-          create: (context) => SocialCubit()..getUserData()..getPosts(),
+          create: (context) => SocialCubit()
+            ..getUserData()
+            ..getPosts(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
@@ -127,8 +143,9 @@ class MyApp extends StatelessWidget {
                 ? ThemeMode.dark
                 : ThemeMode.light,
             home: Directionality(
-              child: startingScreen!,
-              // child: ShopLoginScreen(),
+              // child: SocialLoginScreen()!,
+              // child: startingScreen!,
+              child: NewsLayout(),
               // textDirection: TextDirection.rtl,
               textDirection: TextDirection.ltr,
             ),
