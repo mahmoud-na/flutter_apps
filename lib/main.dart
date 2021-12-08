@@ -144,8 +144,8 @@ class MyApp extends StatelessWidget {
                 : ThemeMode.light,
             home: Directionality(
               // child: SocialLoginScreen()!,
-              // child: startingScreen!,
-              child: NewsLayout(),
+              child: startingScreen!,
+              // child: NewsLayout(),
               // textDirection: TextDirection.rtl,
               textDirection: TextDirection.ltr,
             ),
