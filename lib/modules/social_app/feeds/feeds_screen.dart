@@ -17,7 +17,7 @@ class SocialFeedsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: SocialCubit.get(context).posts.isNotEmpty,
+          condition: SocialCubit.get(context).posts.isNotEmpty ,
           builder: (context) => SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -54,7 +54,7 @@ class SocialFeedsScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => buildPostItem(
-                      SocialCubit.get(context).posts[index], context),
+                      SocialCubit.get(context).posts[index], context,index),
                   itemCount: SocialCubit.get(context).posts.length,
                   separatorBuilder: (BuildContext context, int index) =>
                       const SizedBox(
@@ -67,14 +67,13 @@ class SocialFeedsScreen extends StatelessWidget {
               ],
             ),
           ),
-          fallback: (context) =>
-              const Center(child: CircularProgressIndicator()),
+          fallback: (context) => const Center(child: CircularProgressIndicator()),
         );
       },
     );
   }
 
-  Widget buildPostItem(PostModel model, context) => Card(
+  Widget buildPostItem(PostModel model, context,index) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         margin: const EdgeInsets.symmetric(
@@ -249,7 +248,7 @@ class SocialFeedsScreen extends StatelessWidget {
                                 width: 5.0,
                               ),
                               Text(
-                                "0",
+                                "${SocialCubit.get(context).likes[index]}",
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
@@ -343,7 +342,9 @@ class SocialFeedsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      SocialCubit.get(context).likePost(SocialCubit.get(context).postsId[index]);
+                    },
                   ),
                   const SizedBox(
                     width: 25.0,
