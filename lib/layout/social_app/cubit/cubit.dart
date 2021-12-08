@@ -42,7 +42,7 @@ class SocialCubit extends Cubit<SocialStates> {
   List<Widget> screens = [
     const SocialFeedsScreen(),
     const SocialChatsScreen(),
-     NewPostScreen(),
+    NewPostScreen(),
     const SocialUsersScreen(),
     const SocialSettingsScreen(),
   ];
@@ -177,7 +177,6 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-
   File? postImage;
 
   Future<void> getPostImage() async {
@@ -193,9 +192,9 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  void removePostImage(){
-    postImage =null;
-emit(SocialRemovePostImageState());
+  void removePostImage() {
+    postImage = null;
+    emit(SocialRemovePostImageState());
   }
 
   void uploadPostImage({
@@ -242,10 +241,24 @@ emit(SocialRemovePostImageState());
         .collection('posts')
         .add(model.toMap())
         .then((value) {
-          emit(SocialCreatePostSuccessState());
-    })
-        .catchError((error) {
+      emit(SocialCreatePostSuccessState());
+    }).catchError((error) {
       emit(SocialCreatePostErrorState());
+    });
+  }
+
+  List<PostModel> posts=[];
+
+  void getPosts() {
+    emit(SocialGetPostsLoadingState());
+    FirebaseFirestore.instance.collection('posts').get().then((value) {
+      value.docs.forEach((element) {
+        posts.add(PostModel.fromJson(element.data()));
+      });
+      emit(SocialGetPostsSuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(SocialGetPostsErrorState(error.toString()));
     });
   }
 }

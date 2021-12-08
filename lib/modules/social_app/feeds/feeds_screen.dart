@@ -1,5 +1,10 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/layout/social_app/cubit/cubit.dart';
+import 'package:todo_app/layout/social_app/cubit/states.dart';
+import 'package:todo_app/models/social_app/post_model.dart';
 import 'package:todo_app/shared/styles/colors.dart';
 import 'package:todo_app/shared/styles/icon_broken.dart';
 
@@ -8,58 +13,70 @@ class SocialFeedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5.0,
-            margin: const EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
+    return BlocConsumer<SocialCubit, SocialStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ConditionalBuilder(
+          condition: SocialCubit.get(context).posts.isNotEmpty,
+          builder: (context) => SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
               children: [
-                const Image(
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/happy-young-woman-man-embrace-have-fun-use-modern-technologies-hold-smartphones_273609-30935.jpg',
-                  ),
-                  fit: BoxFit.cover,
-                  height: 200.0,
-                  width: double.infinity,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Communicate With friends",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                          color: Colors.white,
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 5.0,
+                  margin: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      const Image(
+                        image: NetworkImage(
+                          'https://image.freepik.com/free-photo/happy-young-woman-man-embrace-have-fun-use-modern-technologies-hold-smartphones_273609-30935.jpg',
                         ),
+                        fit: BoxFit.cover,
+                        height: 200.0,
+                        width: double.infinity,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Communicate With friends",
+                          style:
+                              Theme.of(context).textTheme.subtitle1?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => buildPostItem(
+                      SocialCubit.get(context).posts[index], context),
+                  itemCount: SocialCubit.get(context).posts.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 8.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8.0,
                 ),
               ],
             ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            itemCount: 10,
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
-              height: 8.0,
-            ),
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-        ],
-      ),
+          fallback: (context) =>
+              const Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 
-  Widget buildPostItem(context) => Card(
+  Widget buildPostItem(PostModel model, context) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation:5.0,
+        elevation: 5.0,
         margin: const EdgeInsets.symmetric(
           horizontal: 8.0,
         ),
@@ -68,14 +85,13 @@ class SocialFeedsScreen extends StatelessWidget {
             10.0,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 25.0,
-                    backgroundImage: NetworkImage(
-                      'https://image.freepik.com/free-photo/portrait-handsome-young-man-makes-okay-gesture-demonstrates-agreement-likes-idea-smiles-happily-wears-optical-glasses-yellow-hat-t-shirt-models-indoor-its-fine-thank-you-hand-sign_273609-30676.jpg',
-                    ),
+                    backgroundImage: NetworkImage('${SocialCubit.get(context).userModel!.image}'),
                   ),
                   const SizedBox(
                     width: 15.0,
@@ -85,17 +101,17 @@ class SocialFeedsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Text(
-                              'Amr Nagy',
-                              style: TextStyle(
+                              '${model.name}',
+                              style: const TextStyle(
                                 height: 1.4,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5.0,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.check_circle,
                               color: defaultColor,
                               size: 16.0,
@@ -103,7 +119,7 @@ class SocialFeedsScreen extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'january 21,2021 at 11:00 pm',
+                          '${model.dateTime}',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                                 height: 1.4,
                               ),
@@ -135,75 +151,81 @@ class SocialFeedsScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                '${model.text}',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10.0,
-                  top: 5.0,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 6.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                            padding: EdgeInsets.zero,
-                            minWidth: 1.0,
-                            onPressed: () {},
-                            child: Text(
-                              '#software',
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        color: defaultColor,
-                                      ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 6.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                            padding: EdgeInsets.zero,
-                            minWidth: 1.0,
-                            onPressed: () {},
-                            child: Text(
-                              '#Flutter',
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        color: defaultColor,
-                                      ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //     bottom: 10.0,
+              //     top: 5.0,
+              //   ),
+              //   child: SizedBox(
+              //     width: double.infinity,
+              //     child: Wrap(
+              //       children: [
+              //         Padding(
+              //           padding: const EdgeInsetsDirectional.only(
+              //             end: 6.0,
+              //           ),
+              //           child: SizedBox(
+              //             height: 25.0,
+              //             child: MaterialButton(
+              //               padding: EdgeInsets.zero,
+              //               minWidth: 1.0,
+              //               onPressed: () {},
+              //               child: Text(
+              //                 '#software',
+              //                 style:
+              //                     Theme.of(context).textTheme.caption?.copyWith(
+              //                           color: defaultColor,
+              //                         ),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsetsDirectional.only(
+              //             end: 6.0,
+              //           ),
+              //           child: SizedBox(
+              //             height: 25.0,
+              //             child: MaterialButton(
+              //               padding: EdgeInsets.zero,
+              //               minWidth: 1.0,
+              //               onPressed: () {},
+              //               child: Text(
+              //                 '#Flutter',
+              //                 style:
+              //                     Theme.of(context).textTheme.caption?.copyWith(
+              //                           color: defaultColor,
+              //                         ),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              if (model.postImage != '')
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 15.0,
                   ),
-                ),
-              ),
-              Container(
-                height: 140.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      'https://image.freepik.com/free-photo/happy-young-woman-man-embrace-have-fun-use-modern-technologies-hold-smartphones_273609-30935.jpg',
+                  child: Container(
+                    height: 140.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          '${model.postImage}',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 5.0,
@@ -227,7 +249,7 @@ class SocialFeedsScreen extends StatelessWidget {
                                 width: 5.0,
                               ),
                               Text(
-                                "1200",
+                                "0",
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
@@ -254,7 +276,7 @@ class SocialFeedsScreen extends StatelessWidget {
                                 width: 5.0,
                               ),
                               Text(
-                                "1200 comment",
+                                "0 comment",
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
@@ -282,11 +304,11 @@ class SocialFeedsScreen extends StatelessWidget {
                     child: InkWell(
                       child: Row(
                         children: [
-                          const CircleAvatar(
+                           CircleAvatar(
                             radius: 18.0,
                             backgroundImage: NetworkImage(
-                              'https://image.freepik.com/free-photo/portrait-handsome-young-man-makes-okay-gesture-demonstrates-agreement-likes-idea-smiles-happily-wears-optical-glasses-yellow-hat-t-shirt-models-indoor-its-fine-thank-you-hand-sign_273609-30676.jpg',
-                            ),
+                             '${SocialCubit.get(context).userModel!.image}'
+                              ),
                           ),
                           const SizedBox(
                             width: 15.0,
